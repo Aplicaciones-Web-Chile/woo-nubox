@@ -3,10 +3,11 @@
 
 # ignore everything in the "wp-content" directory, except:
 # "mu-plugins", "plugins", "themes" directory
+wp-includes/*
 wp-content/*
 !wp-content/mu-plugins/
 !wp-content/plugins/
-!wp-content/themes/
+#!wp-content/themes/
 
 # ignore these plugins
 wp-content/plugins/hello.php
@@ -21,3 +22,40 @@ node_modules/
 *.log
 *.sql
 *.sqlite
+wp-admin/*
+wp-content/plugins/akismet/
+wp-config.php
+wp-config-sample.php
+wp-comments-post.php
+wp-blog-header.php
+wp-activate.php
+readme.html
+license.txt
+index.php
+.htaccess
+wp-content/plugins/booster-plus-for-woocommerce/
+wp-content/plugins/contact-form-7/
+wp-content/plugins/jetpack/
+wp-content/plugins/mailpoet/
+wp-content/plugins/nextend-facebook-connect/
+wp-content/plugins/shipper/
+wp-content/plugins/woocommerce-bulk-stock-management/
+wp-content/plugins/woocommerce-jetpack/
+wp-content/plugins/woocommerce/
+wp-content/plugins/wpmudev-updates/
+wp-content/plugins/yith-woocommerce-bulk-product-editing-premium/
+wp-content/plugins/yith-woocommerce-wishlist/
+wp-content/plugins/woocommerce-mercadopago/
+wp-content/themes/
+wp-cron.php
+wp-links-opml.php
+wp-load.php
+wp-login.php
+wp-mail.php
+wp-settings.php
+wp-signup.php
+wp-trackback.php
+xmlrpc.php
+_*.php
+*.php-tmp
+
