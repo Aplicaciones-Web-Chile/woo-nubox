@@ -1,0 +1,25 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ 
+h1.nubox-logo{
+
+    background: url(../img/logo-nubox.webp) no-repeat;
+    min-height: 60px;
+    max-width: 200px;
+    font-size: 1px;
+
+}
+
+#nubox-form-container .contact-form-editor-panel {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    padding: 16px;
+}
+
+
+#nubox-form-container input{
+    min-width: 320px;
+    width: 100%;
+}
