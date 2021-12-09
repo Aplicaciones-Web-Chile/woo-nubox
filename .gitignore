@@ -2,37 +2,14 @@
 !wp-content/
 
 # ignore everything in the "wp-content" directory, except:
-# "mu-plugins", "plugins", "themes" directory
+# "plugins", "themes" directory
 wp-includes/*
-wp-content/*
-!wp-content/mu-plugins/
 !wp-content/plugins/
 #!wp-content/themes/
 
 # ignore these plugins
 wp-content/plugins/hello.php
-
-# ignore specific themes
-wp-content/themes/twenty*/
-
-# ignore node dependency directories
-node_modules/
-
-# ignore log files and databases
-*.log
-*.sql
-*.sqlite
-wp-admin/*
 wp-content/plugins/akismet/
-wp-config.php
-wp-config-sample.php
-wp-comments-post.php
-wp-blog-header.php
-wp-activate.php
-readme.html
-license.txt
-index.php
-.htaccess
 wp-content/plugins/booster-plus-for-woocommerce/
 wp-content/plugins/contact-form-7/
 wp-content/plugins/jetpack/
@@ -46,7 +23,28 @@ wp-content/plugins/wpmudev-updates/
 wp-content/plugins/yith-woocommerce-bulk-product-editing-premium/
 wp-content/plugins/yith-woocommerce-wishlist/
 wp-content/plugins/woocommerce-mercadopago/
+
+# ignore themes
 wp-content/themes/
+
+# ignore node dependency directories
+node_modules/
+
+# ignore log files and databases
+*.log
+*.sql
+*.sqlite
+wp-admin/*
+wp-config.php
+wp-config-sample.php
+wp-comments-post.php
+wp-blog-header.php
+wp-activate.php
+readme.html
+license.txt
+index.php
+.htaccess
+
 wp-cron.php
 wp-links-opml.php
 wp-load.php
@@ -59,3 +57,4 @@ xmlrpc.php
 _*.php
 *.php-tmp
 
+wp-content/languages/
