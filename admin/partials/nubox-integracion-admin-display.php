@@ -26,7 +26,7 @@ if( isset($_POST) && count($_POST) > 0 ){
     } else {
 
        update_option( 'nubox_api_key', $_POST['nubox_api_key'] );
-       update_option( 'nubox_secret_key', $_POST['nubox_secret_key'] );
+       update_option( 'nubox_mode', $_POST['nubox_mode'] );
 
        $flagNubox = true;
 
@@ -37,8 +37,8 @@ if( isset($_POST) && count($_POST) > 0 ){
 
 
 $nubox_api_key      =   get_option('nubox_api_key'); #'ValorProvenienteDeAppDeIntegracion';
-$nubox_secret_key   =   get_option('nubox_secret_key'); #'*********************';
-# $nubox_mode         =   get_option('nubox_mode'); #'testing'; // testing o produccion
+//$nubox_secret_key   =   get_option('nubox_secret_key'); #'*********************';
+$nubox_mode         =   get_option('nubox_mode'); #'testing'; // testing o produccion
 
 ?>
 
@@ -67,15 +67,7 @@ $nubox_secret_key   =   get_option('nubox_secret_key'); #'*********************'
                     <br />
                     <input type="text" name="nubox_api_key" id="nubox_api_key" value="<?php echo $nubox_api_key; ?>" />
                 </p>
-                <p>
-                    <label>SECRET KEY</label>
-                    <br />
-                    <input type="password" name="nubox_secret_key" id="nubox_secret_key" value="<?php echo $nubox_secret_key; ?>" />
-                </p>
 
-                <div id="nubox_mensajes" class="error notice" style="display: none;"></div>
-
-                <?php /*
                 <p>
                     <label>Modo</label>
                     <br />
@@ -84,7 +76,18 @@ $nubox_secret_key   =   get_option('nubox_secret_key'); #'*********************'
                         <option value="produccion" <?php if($nubox_mode === 'produccion'): echo 'selected="selected"'; endif; ?> >Producción</option>
                     </select>
                 </p>
+                
+                <?php /*
+                <p>
+                    <label>SECRET KEY</label>
+                    <br />
+                    <input type="password" name="nubox_secret_key" id="nubox_secret_key" value="<?php echo $nubox_secret_key; ?>" />
+                </p>
                 */ ?>
+
+                <div id="nubox_mensajes" class="error notice" style="display: none;"></div>
+
+                
             </div><!-- #universal-message-container -->
             <?php
                 wp_nonce_field( 'nubox_settings_save', 'nubox_compruebox' );

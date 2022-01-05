@@ -103,10 +103,10 @@ add_action('admin_notices', function () {
 		<?php
 	}
 
-	$nubox_api_key      =   get_option('nubox_api_key');
-	$nubox_secret_key   =   get_option('nubox_secret_key');
+	$nubox_api_key	=	get_option('nubox_api_key');
+	$nubox_mode		=	get_option('nubox_mode');
 
-	if ( empty($nubox_api_key) || empty($nubox_secret_key) ) {
+	if ( empty($nubox_api_key) || empty($nubox_mode)) {
 		?>
 		<div class="notice notice-error">
 			<p>Debes <a href="<?php echo admin_url( 'admin.php?page=nubox_rest', 'https' ); ?>">agregar las credenciales de la API de Nubox</a></p>
@@ -150,7 +150,7 @@ function nubox_woocommerce_billing_fields($fields){
 										'class'			=>	array('nubox-giro')    // add class name
 									);
 
-    return $fields;
+	return $fields;
 }
 
 
@@ -160,13 +160,13 @@ function nubox_woocommerce_billing_fields($fields){
 add_action( 'woocommerce_checkout_update_order_meta', 'nubox_checkout_field_update_order_meta' );
 function nubox_checkout_field_update_order_meta( $order_id ) {
 
-    if ( ! empty( $_POST['billing_nubox_rut'] ) ) {
-        update_post_meta( $order_id, 'Rut', sanitize_text_field( $_POST['billing_nubox_rut'] ) );
-    }
+	if ( ! empty( $_POST['billing_nubox_rut'] ) ) {
+		update_post_meta( $order_id, 'Rut', sanitize_text_field( $_POST['billing_nubox_rut'] ) );
+	}
 
-    if ( ! empty( $_POST['billing_nubox_giro'] ) ) {
-        update_post_meta( $order_id, 'Giro', sanitize_text_field( $_POST['billing_nubox_giro'] ) );
-    }
+	if ( ! empty( $_POST['billing_nubox_giro'] ) ) {
+		update_post_meta( $order_id, 'Giro', sanitize_text_field( $_POST['billing_nubox_giro'] ) );
+	}
 
 }
 
@@ -394,8 +394,20 @@ function nubox_payment_complete($order_id) {
 
 function request2NuboxApi($data, $order_id){
 
-	$url			=	"https://nubox.aplicacionesweb.dev/webhook/";
-	#$url			=	"https://nubox-mi-dashboard.local/webhook/";
+	$nubox_mode         =   get_option('nubox_mode'); #'testing'; // testing o produccion
+	if ($nubox_mode == 'testing') {
+		
+		if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'wp-nubox.local' ){
+			$url			=	"https://nubox-mi-dashboard.local/webhook/";	
+		}else{
+			$url			=	"https://devintegraciones.nubox.com/webhook";
+		}
+
+	}else{
+		$url			=	"https://integraciones.nubox.com/webhook";
+	}
+
+
 	$content		=	json_encode($data);
 	$array2Return	=	array();
 	$order			=	wc_get_order( $order_id );
@@ -459,7 +471,7 @@ if ( !function_exists('removeSpecialChar') ) {
 
 	function removeSpecialChar($str){
 		$res = preg_replace('/[^a-zA-Z0-9_ -]/s',' ',$str);
-	    return $res;
+		return $res;
 	}
 
 }
