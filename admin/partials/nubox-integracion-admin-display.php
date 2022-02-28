@@ -72,12 +72,12 @@ $nubox_mode         =   get_option('nubox_mode'); #'testing'; // testing o produ
 				</p>-->
 
 				<p>
-					<label>Modo</label>
+					<label>Modo.</label>
 					<br />
 					<select name="nubox_mode" id="nubox_mode" value="<?php echo $nubox_mode; ?>">
-						<!--<option value="testing" <?php if($nubox_mode === 'testing'): echo 'selected="selected"'; endif; ?> >Testing</option>
-						<option value="produccion" <?php if($nubox_mode === 'produccion'): echo 'selected="selected"'; endif; ?> >Producción</option>-->
-						<option value="produccion" selected="selected" >Producción</option>
+						<option value="testing" <?php if($nubox_mode === 'testing'): echo 'selected="selected"'; endif; ?> >Testing</option>
+						<option value="produccion" <?php if($nubox_mode === 'produccion'): echo 'selected="selected"'; endif; ?> >Producción</option>
+						<!--<option value="produccion" selected="selected" >Producción</option>-->
 					</select>
 				</p>
 

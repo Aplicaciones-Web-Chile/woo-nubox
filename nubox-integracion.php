@@ -28,7 +28,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
@@ -37,40 +37,41 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'NUBOX_INTEGRACION_VERSION', '1.0.1' );
+define('NUBOX_INTEGRACION_VERSION', '1.0.1');
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-nubox-integracion-activator.php
  */
-function activate_nubox_integracion() {
+function activate_nubox_integracion()
+{
 
-	if ( !class_exists( 'WooCommerce' ) ) {
+	if (!class_exists('WooCommerce')) {
 		exit('Se necesita tener WooCommerce instalado y activo para poder activar este plugin');
 	}
 
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-nubox-integracion-activator.php';
+	require_once plugin_dir_path(__FILE__) . 'includes/class-nubox-integracion-activator.php';
 	Nubox_Integracion_Activator::activate();
-
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-nubox-integracion-deactivator.php
  */
-function deactivate_nubox_integracion() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-nubox-integracion-deactivator.php';
+function deactivate_nubox_integracion()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-nubox-integracion-deactivator.php';
 	Nubox_Integracion_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_nubox_integracion' );
-register_deactivation_hook( __FILE__, 'deactivate_nubox_integracion' );
+register_activation_hook(__FILE__, 'activate_nubox_integracion');
+register_deactivation_hook(__FILE__, 'deactivate_nubox_integracion');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-nubox-integracion.php';
+require plugin_dir_path(__FILE__) . 'includes/class-nubox-integracion.php';
 
 /**
  * Comienza la ejecución del plugin.
@@ -81,11 +82,11 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-nubox-integracion.php';
  *
  * @since    1.0.0
  */
-function run_nubox_integracion() {
+function run_nubox_integracion()
+{
 
 	$plugin = new Nubox_Integracion();
 	$plugin->run();
-
 }
 
 run_nubox_integracion();
@@ -94,26 +95,25 @@ run_nubox_integracion();
 add_action('woocommerce_order_status_completed', 'nubox_payment_complete', 20, 1);
 
 add_action('admin_notices', function () {
-	
+
 	if (!Nubox_Integracion_Loader::is_valid_for_use()) {
-		?>
+?>
 		<div class="notice notice-error">
 			<p><?php _e('Woocommerce debe estar configurado en pesos chilenos (CLP) para habilitar la integracion con Nubox', 'nubox_wc_plugin'); ?></p>
 		</div>
-		<?php
+	<?php
 	}
 
 	$nubox_api_key	=	get_option('nubox_api_key');
 	$nubox_mode		=	get_option('nubox_mode');
 
-	if ( empty($nubox_api_key) || empty($nubox_mode)) {
-		?>
+	if (empty($nubox_api_key) || empty($nubox_mode)) {
+	?>
 		<div class="notice notice-error">
-			<p>Debes <a href="<?php echo admin_url( 'admin.php?page=nubox_rest', 'https' ); ?>">agregar las credenciales de la API de Nubox</a></p>
+			<p>Debes <a href="<?php echo admin_url('admin.php?page=nubox_rest', 'https'); ?>">agregar las credenciales de la API de Nubox</a></p>
 		</div>
-		<?php
+<?php
 	}
-
 });
 
 
@@ -124,31 +124,31 @@ add_action('admin_menu', function () {
 
 	//create new top-level menu
 	add_submenu_page('woocommerce', __('Configuración de Nubox', 'nubox_wc_plugin'), 'Configuración de Nubox', 'administrator', 'nubox_rest', function () {
-		include __DIR__.'/admin/partials/nubox-integracion-admin-display.php';
+		include __DIR__ . '/admin/partials/nubox-integracion-admin-display.php';
 	}, null);
-
 });
 
 
-function nubox_woocommerce_billing_fields($fields){
+function nubox_woocommerce_billing_fields($fields)
+{
 
 	$fields['billing_nubox_rut']	=	array(
-										'label'			=>	__('RUT', 'woocommerce'), // Add custom field label
-										'placeholder'	=>	_x('Rut', 'placeholder', 'woocommerce'), // Add custom field placeholder
-										'required'		=>	true, // if field is required or not
-										'clear'			=>	false, // add clear or not
-										'type'			=>	'text', // add field type
-										'class'			=>	array('nubox-rut')    // add class name
-									);
+		'label'			=>	__('RUT', 'woocommerce'), // Add custom field label
+		'placeholder'	=>	_x('Rut', 'placeholder', 'woocommerce'), // Add custom field placeholder
+		'required'		=>	true, // if field is required or not
+		'clear'			=>	false, // add clear or not
+		'type'			=>	'text', // add field type
+		'class'			=>	array('nubox-rut')    // add class name
+	);
 
 	$fields['billing_nubox_giro']	=	array(
-										'label'			=>	__('Giro comercial (obligatorio en caso de requerir factura)', 'woocommerce'), // Add custom field label
-										'placeholder'	=>	_x('Giro', 'placeholder', 'woocommerce'), // Add custom field placeholder
-										'required'		=>	false, // if field is required or not
-										'clear'			=>	false, // add clear or not
-										'type'			=>	'text', // add field type
-										'class'			=>	array('nubox-giro')    // add class name
-									);
+		'label'			=>	__('Giro comercial (obligatorio en caso de requerir factura)', 'woocommerce'), // Add custom field label
+		'placeholder'	=>	_x('Giro', 'placeholder', 'woocommerce'), // Add custom field placeholder
+		'required'		=>	false, // if field is required or not
+		'clear'			=>	false, // add clear or not
+		'type'			=>	'text', // add field type
+		'class'			=>	array('nubox-giro')    // add class name
+	);
 
 	return $fields;
 }
@@ -157,48 +157,50 @@ function nubox_woocommerce_billing_fields($fields){
 /**
  * Actualizo Rut y Giro de la orden
  */
-add_action( 'woocommerce_checkout_update_order_meta', 'nubox_checkout_field_update_order_meta' );
-function nubox_checkout_field_update_order_meta( $order_id ) {
+add_action('woocommerce_checkout_update_order_meta', 'nubox_checkout_field_update_order_meta');
+function nubox_checkout_field_update_order_meta($order_id)
+{
 
-	if ( ! empty( $_POST['billing_nubox_rut'] ) ) {
-		update_post_meta( $order_id, 'Rut', sanitize_text_field( $_POST['billing_nubox_rut'] ) );
+	if (!empty($_POST['billing_nubox_rut'])) {
+		update_post_meta($order_id, 'Rut', sanitize_text_field($_POST['billing_nubox_rut']));
 	}
 
-	if ( ! empty( $_POST['billing_nubox_giro'] ) ) {
-		update_post_meta( $order_id, 'Giro', sanitize_text_field( $_POST['billing_nubox_giro'] ) );
+	if (!empty($_POST['billing_nubox_giro'])) {
+		update_post_meta($order_id, 'Giro', sanitize_text_field($_POST['billing_nubox_giro']));
 	}
-
 }
 
 /**
  * Despliego los valores de Rut y Giro
  */
-add_action( 'woocommerce_admin_order_data_after_billing_address', 'nubox_checkout_field_display_admin_order_meta', 10, 1 );
-function nubox_checkout_field_display_admin_order_meta($order){
-	echo '<p><strong>'.__('Rut').':</strong> ' . get_post_meta( $order->id, 'Rut', true ) . '</p>';
-	echo '<p><strong>'.__('Giro').':</strong> ' . get_post_meta( $order->id, 'Giro', true ) . '</p>';
+add_action('woocommerce_admin_order_data_after_billing_address', 'nubox_checkout_field_display_admin_order_meta', 10, 1);
+function nubox_checkout_field_display_admin_order_meta($order)
+{
+	echo '<p><strong>' . __('Rut') . ':</strong> ' . get_post_meta($order->id, 'Rut', true) . '</p>';
+	echo '<p><strong>' . __('Giro') . ':</strong> ' . get_post_meta($order->id, 'Giro', true) . '</p>';
 }
 
 
-function nubox_payment_complete($order_id) {
+function nubox_payment_complete($order_id)
+{
 	global $wpdb;
 
-	$order = wc_get_order( $order_id );
-	$order->add_order_note( '#Nubox Comenzando integración' );
+	$order = wc_get_order($order_id);
+	$order->add_order_note('#Nubox Comenzando integración');
 	$order->save();
 
 	$array2Api = array();
 
 	try {
-		
-		if ( $order->get_status() != 'processing' && $order->get_status() != 'completed'  ) {
-			$order->add_order_note( '#Nubox No se ha integrado con Nubox, ya que no esta pagado.' );
+
+		if ($order->get_status() != 'processing' && $order->get_status() != 'completed') {
+			$order->add_order_note('#Nubox No se ha integrado con Nubox, ya que no esta pagado.');
 			$order->save();
 			return false;
 		}
 
-		$array2Api['token_pi']				=	get_option( 'nubox_api_key');
-		$array2Api['documentoReferenciado']	=	(Object)[];
+		$array2Api['token_pi']				=	get_option('nubox_api_key');
+		$array2Api['documentoReferenciado']	=	(object)[];
 
 		$billing_firstname	= get_post_meta($order_id, '_billing_first_name', true);
 		$billing_lastname	= get_post_meta($order_id, '_billing_last_name', true);
@@ -211,12 +213,12 @@ function nubox_payment_complete($order_id) {
 		$order_amount		= get_post_meta($order_id, '_order_total', true);
 		$pay_type			= get_post_meta($order_id, '_payment_method', true);
 
-		$rut				= get_post_meta( $order->id, 'Rut', true );
+		$rut				= get_post_meta($order->id, 'Rut', true);
 
-		$giro				= get_post_meta( $order->id, 'Giro', true );
+		$giro				= get_post_meta($order->id, 'Giro', true);
 		$giro				= removeSpecialChar($giro);
 
-		$comunaContraparte	= get_post_meta( $order->id, '_billing_state', true );
+		$comunaContraparte	= get_post_meta($order->id, '_billing_state', true);
 
 
 		/*
@@ -247,7 +249,7 @@ function nubox_payment_complete($order_id) {
 		$items		=	$order->get_items();
 		$secuencia	=	1;
 
-		foreach ( $items as $item ) {
+		foreach ($items as $item) {
 
 			$arrayProducto			=	array();
 
@@ -257,7 +259,7 @@ function nubox_payment_complete($order_id) {
 			$quantity				=	$item->get_quantity();
 			$total					=	$item->get_total();
 
-			$product				=	wc_get_product( $product_id );
+			$product				=	wc_get_product($product_id);
 			$descripcion			=	$product->get_description();
 			$descripcion			=	removeSpecialChar($descripcion);
 
@@ -279,12 +281,12 @@ function nubox_payment_complete($order_id) {
 			# https://developers.nubox.com/emision-venta
 
 			$arrayProducto['rutContraparte']					=	$rut;
-			$arrayProducto['razonSocialContraparte']			=	removeSpecialChar( $billing_firstname . ' ' . $billing_lastname );
-			$arrayProducto['giroContraparte']					=	removeSpecialChar( $giro );
+			$arrayProducto['razonSocialContraparte']			=	removeSpecialChar($billing_firstname . ' ' . $billing_lastname);
+			$arrayProducto['giroContraparte']					=	removeSpecialChar($giro);
 			$arrayProducto['comunaContraparte']					=	$comunaContraparte;
 
-			$arrayProducto['direccionContraparte']				=	$shipping_address1.' '.$shipping_address2;
-			$arrayProducto['direccionContraparte']				=	removeSpecialChar( $arrayProducto['direccionContraparte'] );
+			$arrayProducto['direccionContraparte']				=	$shipping_address1 . ' ' . $shipping_address2;
+			$arrayProducto['direccionContraparte']				=	removeSpecialChar($arrayProducto['direccionContraparte']);
 
 			/*
 			Código SII del tipo de documento. Valores posibles:
@@ -355,33 +357,43 @@ function nubox_payment_complete($order_id) {
 
 			$array2Api['productos'][]							=	$arrayProducto;
 			$secuencia++;
-			
 		}
 
 
-		$order->add_order_note( '#Nubox Enviando set de datos: ['. json_encode($array2Api).']' );
+		$order->add_order_note('#Nubox Enviando set de datos: [' . json_encode($array2Api) . ']');
 		$order->save();
 
 		$response = request2NuboxApi($array2Api, $order_id);
 
-		if( !empty($response) ){
 
-			if ($response['status'] == 200) { 
-				$order->add_order_note( '#Nubox Integración exitosa. (Status: '.$response['array2Return']['status'].')');
+
+
+		
+		/************************************************************************************
+		
+			$RESPONSE NO DEVUELVE UN ['STATUS'] A EVALUAR, POR LO QUE SIEMPRE VA A ELSE
+
+		************************************************************************************/
+
+		if (!empty($response)) {
+			$code = $response['code'];
+
+			if ($code == 200) {
+				$order->add_order_note('#Nubox Integración exitosa. (Status: ' . json_encode($code) . ')');
 				$order->save();
 				return true;
-			}
-			else {
-				$order->add_order_note( '#Nubox error con integracion (Status: '.$response['array2Return']['status'].'). Respuesta en archivo log/json.' );
+			} else {
+				// $order->add_order_note('#Nubox error con integración (Status: ' . $response['array2Return']['status'] .  ').');
+				$order->add_order_note('#Nubox error con integración (Status: ' . json_encode($code) .  ').');
 				$order->save();
 				return false;
-			} 
+			}
 		} else {
-			$order->add_order_note( '#Nubox error en respuesta con integración. Respuesta en archivo log/json.');
+			$order->add_order_note('#Nubox error en respuesta con integración.');
 			$order->save();
 		}
 	} catch (Exception $e) {
-		$order->add_order_note( '#Nubox error en ejecución de integración.  Error: ['. $e->getMessage().']');
+		$order->add_order_note('#Nubox error en ejecución de integración.  Error: [' . $e->getMessage() . ']');
 		$order->save();
 	}
 
@@ -392,70 +404,98 @@ function nubox_payment_complete($order_id) {
 
 
 
-function request2NuboxApi($data, $order_id){
+function request2NuboxApi($data, $order_id)
+{
 
 	$nubox_mode         =   get_option('nubox_mode'); #'testing'; // testing o produccion
 	if ($nubox_mode == 'testing') {
-		
-		if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'wp-nubox.local' ){
-			$url			=	"https://nubox-mi-dashboard.local/webhook/";	
-		}else{
-			$url			=	"https://devintegraciones.nubox.com/webhook";
-		}
 
-	}else{
+		if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'wp-nubox.local') {
+			$url			=	"https://nubox-mi-dashboard.local/webhook/";
+		} else {
+			$url			=	"https://dev.integraciones.nubox.com/webhook";
+		}
+	} else {
 		$url			=	"https://integraciones.nubox.com/webhook";
 	}
 
 
 	$content		=	json_encode($data);
 	$array2Return	=	array();
-	$order			=	wc_get_order( $order_id );
+	$order			=	wc_get_order($order_id);
 
-	#$jsonValid		=	json_validate($json);
-	#p($jsonValid, 'jsonValid');die();
+	/*
+		$curl			=	curl_init($url);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HTTPHEADER,
+				array("Content-type: application/json"));
+		//curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($curl, CURLOPT_POSTREDIR, 3);
 
-	#$content	=	json_encode($json_array);
-	$curl		=	curl_init($url);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
 
-	curl_setopt($curl, CURLOPT_HEADER, false);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_HTTPHEADER,
-			array("Content-type: application/json"));
-	curl_setopt($curl, CURLOPT_POST, true);
-	curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+		# Solo para localhost
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+	*/
+	$result = wp_remote_post(
+		$url,
+		array(
+			'method'		=>	'POST',
+			'headers'		=>	array("Content-type: application/json"),
+			'timeout'		=>	60, // added
+			'redirection'	=>	5,  // added
+			'blocking'		=>	true, // added
+			'httpversion'	=>	'1.0',
+			'sslverify'		=>	false,
+			'body'			=>	$content
+		)
+	);
 
+	//Obtener directamente el mensaje de error en una variable
+	$body = json_decode($result['body']);
+	$code = $result['response'];
+	$code =	$code['code'];
 
-	# Solo para localhost
-	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+	$body = $body->{'respGenDoc'};
+	$body = json_decode($body->{'response'});
+	$error_msg = $body->{'Message'};
 
-	$array2Return['json_response']	=	json_decode( curl_exec($curl) );
-	$array2Return['status']			=	curl_getinfo($curl, CURLINFO_HTTP_CODE);
-	curl_close($curl);
+	$array2Return['urlApi']			=	$url;
+
+	if (is_wp_error($result)) {
+		$array2Return['json_response_error']	=	$result->get_error_message();
+	} else {
+		$array2Return['json_response_ok']	=	$result;
+		$array2Return['code']	=	$code;
+	}
+
+	$array2Return['result']	=	$error_msg;
 
 	$upload_dir		=	wp_upload_dir();
-	$dirJson		=	$upload_dir['basedir'].'/json/';
+	$dirJson		=	$upload_dir['basedir'] . '/json/';
 	$flagDirExists	=	false;
 
-	if ( !is_dir($dirJson) ) {
+	if (!is_dir($dirJson)) {
 		$flagDirExists = wp_mkdir_p($dirJson);
-	}else{
+	} else {
 		$flagDirExists = true;
 	}
 
-	$jsonFileName	=	'response-'.date('Y-m-d_H-i-s').'.json';
-	$jsonFile		=	$dirJson.$jsonFileName;
+	$jsonFileName	=	'response-' . date('Y-m-d_H-i-s') . '.json';
+	$jsonFile		=	$dirJson . $jsonFileName;
 	#$order->add_order_note( '#Nubox $jsonFile -> ' . $jsonFile );
 
-	if( $flagDirExists === true ) {
+	if ($flagDirExists === true) {
 
 		$fp	=	fopen($jsonFile, 'w');
 		$array4file['data']			=	$data;
 		$array4file['array2Return']	=	$array2Return;
 		fwrite($fp, json_encode($array4file));
 		fclose($fp);
-		$order->add_order_note( '#Nubox $jsonFile -> ' . $jsonFileName );
+		$order->add_order_note('#Nubox '. $error_msg .'<br/>Respuesta en archivo: ' . $jsonFileName);
 	}
 
 	#$a = ( $flagDirExists === true ) ? 'Verdadero' : 'Falso';
@@ -467,57 +507,11 @@ function request2NuboxApi($data, $order_id){
 
 
 
-if ( !function_exists('removeSpecialChar') ) {
+if (!function_exists('removeSpecialChar')) {
 
-	function removeSpecialChar($str){
-		$res = preg_replace('/[^a-zA-Z0-9_ -]/s',' ',$str);
+	function removeSpecialChar($str)
+	{
+		$res = preg_replace('/[^a-zA-Z0-9_ -]/s', ' ', $str);
 		return $res;
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
