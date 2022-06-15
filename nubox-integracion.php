@@ -306,7 +306,7 @@ function nubox_payment_complete($order_id)
 
 			$arrayProducto['codigoItem']		 				=	'';
 			$arrayProducto['producto']							=	$product_name;
-			$arrayProducto['descripcion']						=	$descripcion;
+			$arrayProducto['descripcion']						=	substr($descripcion, 0, 890);
 			$arrayProducto['cantidad']							=	$quantity;
 			$arrayProducto['valor']								=	abs($total);
 
